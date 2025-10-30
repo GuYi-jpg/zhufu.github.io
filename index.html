@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>温馨提示</title>
+    <style>
+        /* 弹窗样式 */
+        .tip-box {
+            position: fixed;
+            padding: 20px 40px;
+            border-radius: 10px;
+            font-family: "微软雅黑", sans-serif;
+            font-size: 18px;
+            text-align: center;
+            z-index: 9999; /* 置顶显示 */
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // 提示文字列表（和原Python一致）
+        const tips = [
+            '多喝水哦~', '保持微笑呀', '每天都要元气满满',
+            '记得吃水果', '保持好心情', '好好爱自己', '我想你了',
+            '梦想成真', '期待下一次见面', '金榜题名',
+            '顺顺利利', '早点休息', '愿所有烦恼都消失',
+            '别熬夜', '今天过得开心嘛', '天冷了，多穿衣服'
+        ];
+
+        // 背景颜色列表
+        const bgColors = [
+            'lightpink', 'skyblue', 'lightgreen', 'lavender',
+            'lightyellow', 'plum', 'coral', 'bisque', 'aquamarine',
+            'mistyrose', 'honeydew', 'lavenderblush', 'oldlace'
+        ];
+
+        // 随机生成弹窗（模仿Python的多窗口效果）
+        function createTipBox() {
+            // 1. 创建弹窗元素
+            const box = document.createElement('div');
+            box.className = 'tip-box';
+
+            // 2. 随机内容和样式
+            box.innerText = tips[Math.floor(Math.random() * tips.length)];
+            box.style.backgroundColor = bgColors[Math.floor(Math.random() * bgColors.length)];
+
+            // 3. 随机位置（确保在屏幕内）
+            const screenWidth = window.innerWidth;
+            const screenHeight = window.innerHeight;
+            const boxWidth = 250;
+            const boxHeight = 80;
+            const x = Math.random() * (screenWidth - boxWidth);
+            const y = Math.random() * (screenHeight - boxHeight);
+            box.style.left = x + 'px';
+            box.style.top = y + 'px';
+
+            // 4. 添加到页面
+            document.body.appendChild(box);
+
+            // 5. 3秒后自动关闭（避免弹窗过多）
+            setTimeout(() => {
+                box.style.opacity = 0;
+                setTimeout(() => box.remove(), 500);
+            }, 3000);
+        }
+
+        // 批量生成弹窗（30个，比Python少避免卡顿）
+        for (let i = 0; i < 30; i++) {
+            setTimeout(createTipBox, i * 100); // 每隔100毫秒生成一个
+        }
+    </script>
+</body>
+</html>
