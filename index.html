@@ -15,12 +15,39 @@
             text-align: center;
             z-index: 9999; /* 置顶显示 */
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: opacity 0.5s; /* 关闭时淡入淡出效果 */
+        }
+        
+        /* 音乐控制按钮样式（文字按钮，无外部依赖） */
+        .music-control {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            border-radius: 20px;
+            background-color: rgba(255,255,255,0.9);
+            font-family: "微软雅黑", sans-serif;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            z-index: 10000; /* 比弹窗层级高，确保可见 */
         }
     </style>
 </head>
 <body>
+    <!-- 音乐播放器（默认隐藏，通过按钮控制） -->
+    <audio id="backgroundMusic" loop>
+        <source src="a-little-story.mp3" type="audio/mpeg">
+        您的浏览器不支持音频播放
+   </audio>
+    
+    <!-- 音乐控制按钮（文字显示，无需图标库） -->
+    <div class="music-control" onclick="toggleMusic()">
+        播放音乐
+    </div>
+
     <script>
-        // 提示文字列表（和原Python一致）
+        // 提示文字列表
         const tips = [
             '多喝水哦~', '保持微笑呀', '每天都要元气满满',
             '记得吃水果', '保持好心情', '好好爱自己', '我想你了',
@@ -36,17 +63,14 @@
             'mistyrose', 'honeydew', 'lavenderblush', 'oldlace'
         ];
 
-        // 随机生成弹窗（模仿Python的多窗口效果）
+        // 随机生成弹窗
         function createTipBox() {
-            // 1. 创建弹窗元素
             const box = document.createElement('div');
             box.className = 'tip-box';
-
-            // 2. 随机内容和样式
             box.innerText = tips[Math.floor(Math.random() * tips.length)];
             box.style.backgroundColor = bgColors[Math.floor(Math.random() * bgColors.length)];
 
-            // 3. 随机位置（确保在屏幕内）
+            // 随机位置（确保在屏幕内）
             const screenWidth = window.innerWidth;
             const screenHeight = window.innerHeight;
             const boxWidth = 250;
@@ -56,19 +80,32 @@
             box.style.left = x + 'px';
             box.style.top = y + 'px';
 
-            // 4. 添加到页面
             document.body.appendChild(box);
 
-            // 5. 3秒后自动关闭（避免弹窗过多）
+            // 3秒后自动关闭
             setTimeout(() => {
                 box.style.opacity = 0;
                 setTimeout(() => box.remove(), 500);
             }, 3000);
         }
 
-        // 批量生成弹窗（30个，比Python少避免卡顿）
-        for (let i = 0; i < 30; i++) {
-            setTimeout(createTipBox, i * 100); // 每隔100毫秒生成一个
+        // 音乐控制功能（切换播放/暂停，更新按钮文字）
+        function toggleMusic() {
+            const music = document.getElementById('backgroundMusic');
+            const btn = document.querySelector('.music-control');
+            
+            if (music.paused) {
+                music.play();
+                btn.innerText = '暂停音乐'; // 播放时显示“暂停音乐”
+            } else {
+                music.pause();
+                btn.innerText = '播放音乐'; // 暂停时显示“播放音乐”
+            }
+        }
+
+        // 批量生成弹窗
+        for (let i = 0; i < 100; i++) {
+            setTimeout(createTipBox, i * 150);
         }
     </script>
 </body>
